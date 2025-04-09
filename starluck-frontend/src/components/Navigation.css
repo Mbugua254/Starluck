@@ -1,0 +1,30 @@
+.active {
+    font-weight: bold;
+    color: blue;
+  }
+  nav {
+    background-color: #333;
+    padding: 10px;
+  }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  li {
+    display: inline;
+    margin-right: 20px;
+  }
+  
+  a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+  }
+  
+  a:hover {
+    color: #f0f0f0;
+  }
+  
+  
