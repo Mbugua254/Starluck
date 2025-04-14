@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import './Home.css';
 
 const TourDetail = () => {
   const { id } = useParams();
@@ -25,7 +26,7 @@ const TourDetail = () => {
       <p>{tour.description}</p>
       <p>Price: ${tour.price}</p>
       {/* Link to booking page */}
-      <Link to={`/bookings/${tour.id}`}>Book this tour</Link>
+      <Link to={`/bookings/${tour.id}`} className='browse-link'>Book this tour</Link>
     </div>
   );
 };

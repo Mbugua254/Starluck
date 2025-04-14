@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import './TourList.css';
 
 const TourList = () => {
   const [tours, setTours] = useState([]);
@@ -18,13 +19,15 @@ const TourList = () => {
   return (
     <div>
       <h2>Our Tours</h2>
+      <div className="destination-grid">
       <ul>
         {tours.map(tour => (
-          <li key={tour.id}>
+          <div key={tour.id} className="destination-card">
             <Link to={`/tours/${tour.id}`}>{tour.name}</Link>
-          </li>
+          </div>
         ))}
       </ul>
+      </div>
     </div>
   );
 }
