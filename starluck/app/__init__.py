@@ -4,8 +4,10 @@ from flask_migrate import Migrate
 from flask_cors import CORS
 
 
+
 db = SQLAlchemy()
 migrate = Migrate()
+
 
 def create_app():
     app = Flask(__name__)
@@ -19,6 +21,7 @@ def create_app():
     # Initialize the app with the database and migrations
     db.init_app(app)
     migrate.init_app(app, db)
+   
 
     CORS(app)
 

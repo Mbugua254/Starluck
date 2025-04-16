@@ -7,6 +7,9 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)  # If you need password hashing
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    role = db.Column(db.String(20), default='user')
+
+
 
     tours = db.relationship('Tour', secondary='user_tours', back_populates='users')
     bookings = db.relationship('Booking', backref='user', lazy=True)
@@ -14,6 +17,9 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User {self.username}>'
+
+    def is_admin(self):
+        return self.role == 'admin'
 
 # Tour Model
 class Tour(db.Model):

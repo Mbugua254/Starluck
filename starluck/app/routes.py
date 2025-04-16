@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from functools import wraps
 from app import db
 from app.models import User, Tour, Booking, Review
 from datetime import datetime
@@ -10,6 +11,29 @@ bp = Blueprint('api', __name__)
 
 # Secret key for encoding/decoding JWT (should be kept secret and secure)
 SECRET_KEY = 'your_secret_key'
+
+#Protected routes (admins only access)
+def admin_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        token = request.headers.get('Authorization', None)
+        if not token:
+            return jsonify({'message': 'Missing token'}), 401
+
+        try:
+            data = jwt.decode(token, SECRET_KEY, algorithms=['HS256'])
+            user = User.query.get(data['user_id'])
+            if not user or user.role != 'admin':
+                return jsonify({'message': 'Admin access required'}), 403
+        except jwt.ExpiredSignatureError:
+            return jsonify({'message': 'Token expired'}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({'message': 'Invalid token'}), 401
+
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 
 # Login route - authenticate user and generate JWT token
 @bp.route('/login', methods=['POST'])
@@ -29,8 +53,14 @@ def login():
         )
         
         return jsonify({
+            'success': True,
             'message': 'Login successful',
-            'token': token
+            'token': token,
+            'user': {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email
+                }
         }), 200
     else:
         return jsonify({'message': 'Invalid credentials'}), 401
@@ -47,7 +77,11 @@ def create_booking():
     data = request.get_json()
     user_id = data.get('user_id')
     tour_id = data.get('tour_id')
-    booking_date = data.get('booking_date', str(datetime.now()))
+    booking_date = data.get('booking_date', datetime.now())
+
+    if isinstance(booking_date, str):
+        booking_date = datetime.fromisoformat(booking_date)
+        
     status = data.get('status', 'Pending')
     payment_status = data.get('payment_status', 'Unpaid')
 
@@ -115,13 +149,15 @@ def create_review():
 @bp.route('/tours/<int:tour_id>/reviews', methods=['GET'])
 def get_tour_reviews(tour_id):
     reviews = Review.query.filter_by(tour_id=tour_id).all()
-    return jsonify([{
-        'id': review.id,
-        'user_id': review.user_id,
-        'tour_id': review.tour_id,
-        'rating': review.rating,
-        'review_text': review.review_text
-    } for review in reviews])
+    result = []
+    for review in reviews:
+        user = User.query.get(review.user_id)
+        result.append({
+            'username': user.username,
+            'review_text': review.review_text,
+            'rating': review.rating
+        })
+    return jsonify(result)
 
 # Get all reviews for a specific user
 @bp.route('/users/<int:user_id>/reviews', methods=['GET'])
@@ -238,33 +274,30 @@ def get_user(user_id):
         'email': user.email
     })
 
-# Add a new tour
+# Add a new tour : Testing admin roles
 @bp.route('/tours', methods=['POST'])
+@admin_required
 def create_tour():
     data = request.get_json()
-    name = data.get('name')
-    location = data.get('location')
-    description = data.get('description')
-    price = data.get('price')
-
-    tour = Tour(
-        name=name,
-        location=location,
-        description=description,
-        price=price
+    new_tour = Tour(
+        name=data['name'],
+        location=data['location'],
+        description=data['description'],
+        price=data['price']
     )
-
-    db.session.add(tour)
+    db.session.add(new_tour)
     db.session.commit()
 
     return jsonify({
-        'id': tour.id,
-        'name': tour.name,
-        'location': tour.location,
-        'description': tour.description,
-        'price': tour.price
+        'message': 'Tour created successfully',
+        'tour': {
+            'id': new_tour.id,
+            'name': new_tour.name,
+            'location': new_tour.location,
+            'description': new_tour.description,
+            'price': new_tour.price
+        }
     }), 201
-
 # Get all tours
 @bp.route('/tours', methods=['GET'])
 def get_tours():
@@ -288,3 +321,29 @@ def get_tour(tour_id):
         'description': tour.description,
         'price': tour.price
     })
+
+# Update tour details
+@bp.route('/tours/<int:tour_id>', methods=['PUT'])
+@admin_required
+def update_tour(tour_id):
+    data = request.get_json()
+    tour = Tour.query.get_or_404(tour_id)
+
+    tour.name = data.get('name', tour.name)
+    tour.location = data.get('location', tour.location)
+    tour.description = data.get('description', tour.description)
+    tour.price = data.get('price', tour.price)
+
+    db.session.commit()
+
+    return jsonify({
+        'message': 'Tour updated successfully',
+        'tour': {
+            'id': tour.id,
+            'name': tour.name,
+            'location': tour.location,
+            'description': tour.description,
+            'price': tour.price
+        }
+    }), 200
+
