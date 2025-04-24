@@ -29,6 +29,7 @@ class Tour(db.Model):
     description = db.Column(db.String(500))
     price = db.Column(db.Float, nullable=False)  # Optional: If pricing is involved
     created_at = db.Column(db.DateTime, default=db.func.current_timestamp())
+    image_url = db.Column(db.String(255), nullable=True) 
 
     users = db.relationship('User', secondary='user_tours', back_populates='tours')
     bookings = db.relationship('Booking', backref='tour', lazy=True)

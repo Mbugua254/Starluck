@@ -1,29 +1,60 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';  // Use NavLink for active link functionality
-import './Navigation.css';  // Optional: CSS for styling
+import { NavLink, useNavigate } from 'react-router-dom';
+import './Navigation.css';
 
 const Navigation = () => {
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    navigate('/');
+  };
+
   return (
     <nav>
       <ul>
         <li>
-          <NavLink to="/" exact activeClassName="active">Home</NavLink>
+          <NavLink to="/" end className={({ isActive }) => (isActive ? 'active' : '')}>
+            Home
+          </NavLink>
         </li>
         <li>
-          <NavLink to="/tours">Tours</NavLink>  {/* Link to Tours page */}
+          <NavLink to="/tours" className={({ isActive }) => (isActive ? 'active' : '')}>
+            Tours
+          </NavLink>
         </li>
-        <li>
-          <NavLink to="/about" activeClassName="active">About</NavLink>
-        </li>
-        <li>
-          <NavLink to="/services" activeClassName="active">Services</NavLink>
-        </li>
-        <li>
-          <NavLink to="/contact" activeClassName="active">Contact</NavLink>
-        </li>
-        <li>
-          <NavLink to="/login" activeClassName="active">Login</NavLink>
-        </li>
+        {!user ? (
+          <>
+            <li>
+              <NavLink to="/register" className={({ isActive }) => (isActive ? 'active' : '')}>
+                Register
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/login" className={({ isActive }) => (isActive ? 'active' : '')}>
+                Login
+              </NavLink>
+            </li>
+          </>
+        ) : (
+          <>
+            <li>
+              <NavLink to="/user-dashboard" className={({ isActive }) => (isActive ? 'active' : '')}>
+                Dashboard
+              </NavLink>
+            </li>
+            <li>
+  <NavLink
+    to="/"
+    onClick={handleLogout}
+    className={({ isActive }) => (isActive ? 'active' : '')}
+  >
+    Logout
+  </NavLink>
+</li>
+          </>
+        )}
       </ul>
     </nav>
   );

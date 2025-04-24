@@ -1,41 +1,56 @@
-// src/components/Login.js
+// Login.js
 import React, { useState } from 'react';
-import axios from 'axios';
-import { useHistory } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import './Login.css';
 
-const Login = ({ setUser }) => {
+const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
-  const history = useHistory();
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null); // Clear any existing errors
 
     try {
-      const response = await axios.post('http://127.0.0.1:5000/login', {
-        email,
-        password
+      const response = await fetch('http://127.0.0.1:5000/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
       });
 
-      if (response.data.success) {
-        setUser(response.data.user);  // Assuming the user object is returned
-        history.push('/dashboard');  // Redirect to Dashboard after successful login
+      const data = await response.json();
+
+      if (response.ok) {
+        // Store token (optional, for authenticated routes)
+        localStorage.setItem('token', data.token);
+        // Optionally store user data
+        localStorage.setItem('user', JSON.stringify(data.user));
+        // Show success message
+        alert('Login successful!');
+        // Call the parent onLogin handler if passed
+        if (onLogin) onLogin(data.user);
+        // Redirect to home
+        navigate('/');
       } else {
-        setErrorMessage(response.data.message || 'Login failed.');
+        setError(data.message || 'Login failed');
       }
-    } catch (error) {
-      console.error('Error logging in:', error);
-      setErrorMessage('An error occurred while logging in.');
+    } catch (err) {
+      setError('An error occurred. Please try again.');
     }
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h2>Login</h2>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Email:</label>
+          <label>Email:</label><br />
           <input
             type="email"
             value={email}
@@ -44,18 +59,16 @@ const Login = ({ setUser }) => {
           />
         </div>
         <div>
-          <label>Password:</label>
+          <label>Password:</label><br />
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </div>
+        </div><br />
         <button type="submit">Login</button>
       </form>
-
-      {errorMessage && <p>{errorMessage}</p>}
     </div>
   );
 };

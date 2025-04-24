@@ -1,0 +1,132 @@
+.dashboard-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .dashboard-title {
+    font-size: 2rem;
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .dashboard-section {
+    margin-bottom: 2rem;
+  }
+  
+  .dashboard-section h3 {
+    color: #2980b9;
+    margin-bottom: 1rem;
+  }
+  
+  .dashboard-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .dashboard-item {
+    background: #f6f9fc;
+    border: 1px solid #e1e4e8;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  
+  .dashboard-empty {
+    color: #888;
+    font-style: italic;
+  }
+  
+  .dashboard-link {
+    display: inline-block;
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background 0.3s ease;
+  }
+  
+  .dashboard-link:hover {
+    background: #2980b9;
+  }
+  
+  .dashboard-loading {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #555;
+    margin-top: 4rem;
+  }
+  .bookings-grid{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    row-gap: 1rem;
+    margin-top: 1rem;
+  }
+  /* Grid layout for reviews */
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1.5rem;
+  row-gap: 3rem;
+  margin-top: 1rem;
+
+}
+
+/* Individual review card */
+.review-card {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  
+}
+
+/* Tour label above the stars */
+.review-tour {
+  font-weight: 500;
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+/* Stars and review text */
+.stars-and-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.stars-display {
+  display: flex;
+  gap: 4px;
+}
+
+.star {
+  font-size: 1.2rem;
+  color: #ccc;
+}
+
+.star.filled {
+  color: #f1c40f;
+}
+
+.review-text {
+  font-size: 0.95rem;
+  color: #444;
+  line-height: 1.4;
+}

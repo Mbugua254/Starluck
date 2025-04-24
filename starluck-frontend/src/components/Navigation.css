@@ -2,14 +2,22 @@
     font-weight: bold;
     color: blue;
   }
+
   nav {
     background-color: #333;
     padding: 10px;
+    position: relative;
+    z-index: 10;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
   }
   
   ul {
     list-style-type: none;
     padding: 0;
+    display: flex;
   }
   
   li {
@@ -26,5 +34,3 @@
   a:hover {
     color: #f0f0f0;
   }
-  
-  

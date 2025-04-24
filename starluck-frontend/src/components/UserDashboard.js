@@ -2,63 +2,89 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import './UserDashboard.css';
 
 const UserDashboard = () => {
-  const [user, setUser] = useState(null); // Placeholder for logged-in user details
+  const [user, setUser] = useState(null);
   const [bookings, setBookings] = useState([]);
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    // Here, we assume the logged-in user has an ID of 1 for demo purposes
-    const userId = 1;
+    const storedUser = localStorage.getItem('user');
+    const userData = storedUser ? JSON.parse(storedUser) : null;
 
-    // Fetch user's bookings
+    if (!userData) return;
+
+    setUser({ id: userData.id, name: userData.username });
+
     axios
-      .get(`http://127.0.0.1:5000/users/${userId}/bookings`)
-      .then((response) => {
-        setBookings(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching bookings:', error);
-      });
+      .get(`http://127.0.0.1:5000/users/${userData.id}/bookings`)
+      .then((res) => setBookings(res.data))
+      .catch((err) => console.error('Error fetching bookings:', err));
 
-    // Fetch user's reviews
     axios
-      .get(`http://127.0.0.1:5000/users/${userId}/reviews`)
-      .then((response) => {
-        setReviews(response.data);
-      })
-      .catch((error) => {
-        console.error('Error fetching reviews:', error);
-      });
-
-    // Fetch logged-in user's info (or retrieve it from context)
-    setUser({ id: userId, name: 'John Doe' }); // Example user info
+      .get(`http://127.0.0.1:5000/users/${userData.id}/reviews`)
+      .then((res) => setReviews(res.data))
+      .catch((err) => console.error('Error fetching reviews:', err));
   }, []);
 
+  if (!user) {
+    return <div className="dashboard-loading">Loading your dashboard...</div>;
+  }
+
   return (
-    <div>
-      <h2>{user ? `${user.name}'s Dashboard` : 'Loading...'}</h2>
+    <div className="dashboard-container">
+      <h2 className="dashboard-title">{user.name}'s Dashboard</h2>
 
-      <h3>Your Bookings</h3>
-      <ul>
-        {bookings.map((booking) => (
-          <li key={booking.id}>
-            Tour ID: {booking.tour_id} | Status: {booking.status} | Payment: {booking.payment_status}
-          </li>
-        ))}
-      </ul>
+      <section className="dashboard-section">
+        <h3>Your Bookings</h3>
+        {bookings.length === 0 ? (
+          <p className="dashboard-empty">No bookings found.</p>
+        ) : (
+          <div className="bookings-grid">
+            {bookings.map((booking) => (
+              <li key={booking.id} className="dashboard-item">
+                <span><strong>Tour ID:</strong> {booking.tour_id}</span>
+                <span><strong>Status:</strong> {booking.status}</span>
+                <span><strong>Payment:</strong> {booking.payment_status}</span>
+              </li>
+            ))}
+          </div>
+        )}
+      </section>
 
-      <h3>Your Reviews</h3>
-      <ul>
-        {reviews.map((review) => (
-          <li key={review.id}>
-            Tour ID: {review.tour_id} | Rating: {review.rating} | Review: {review.review_text}
-          </li>
-        ))}
-      </ul>
+      <section className="dashboard-section">
+  <h3>Your Reviews</h3>
+  {reviews.length === 0 ? (
+    <p className="dashboard-empty">No reviews yet.</p>
+  ) : (
+    <div className="reviews-grid">
+      {reviews.map((review) => (
+        <div key={review.id} className="review-card">
+          <span className="review-tour">
+            <strong>Tour:</strong> {review.tour?.name || review.tour_id}
+          </span>
 
-      <Link to="/tours">Back to Tours</Link>
+          <div className="stars-and-text">
+            <div className="stars-display">
+              {[...Array(5)].map((_, i) => (
+                <span
+                  key={i}
+                  className={`star ${i < review.rating ? 'filled' : ''}`}
+                >
+                  &#9733;
+                </span>
+              ))}
+            </div>
+            <p className="review-text">{review.review_text}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  )}
+</section>
+
+      <Link to="/tours" className="dashboard-link">← Back to Tours</Link>
     </div>
   );
 };

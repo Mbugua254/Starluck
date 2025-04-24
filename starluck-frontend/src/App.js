@@ -8,6 +8,9 @@ import BookingForm from './components/BookingForm';
 import ReviewForm from './components/ReviewForm';
 import { AuthProvider } from './context/AuthContext';
 import Navigation from './components/Navigation';
+import Login from './components/Login';
+import Register from './components/Register';
+import PrivateRoute from './components/PrivateRoute';
 
 const App = () => {
   return (
@@ -19,8 +22,20 @@ const App = () => {
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/tours" element={<TourList />} />
         <Route path="/tours/:id" element={<TourDetail />} />
-        <Route path="/booking/:tourId" element={<BookingForm />} />
-        <Route path="/review/:tourId" element={<ReviewForm />} />
+        <Route path="/bookings/:id" element={<BookingForm />} />
+        <Route path="/tours/:id/review" element={<ReviewForm />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        {/*Restricted*/}
+        <Route
+        path='/tours/:id'
+        element={
+          <PrivateRoute>
+            <TourDetail />
+            </PrivateRoute>
+        }
+        />
       </Routes>
     </Router>
     </AuthProvider>

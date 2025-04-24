@@ -12,6 +12,21 @@ bp = Blueprint('api', __name__)
 # Secret key for encoding/decoding JWT (should be kept secret and secure)
 SECRET_KEY = 'your_secret_key'
 
+#Authenticated users only
+def token_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'message': 'Token is missing!'}), 403
+        try:
+            data = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+            current_user = data['user_id']
+        except Exception as e:
+            return jsonify({'message': 'Token is invalid!', 'error': str(e)}), 403
+        return f(current_user, *args, **kwargs)
+    return decorated_function
+
 #Protected routes (admins only access)
 def admin_required(f):
     @wraps(f)
@@ -173,10 +188,12 @@ def get_user_reviews(user_id):
 
 # Update a booking status
 @bp.route('/bookings/<int:booking_id>', methods=['PUT'])
-def update_booking(booking_id):
-    data = request.get_json()
+@token_required
+def update_booking(current_user, booking_id):
     booking = Booking.query.get_or_404(booking_id)
-
+    if booking.user_id != current_user:
+        return jsonify({'message': 'You are not authorized to edit this booking.'}), 403
+    data = request.get_json()
     # Update booking fields
     booking.status = data.get('status', booking.status)
     booking.payment_status = data.get('payment_status', booking.payment_status)
@@ -194,8 +211,11 @@ def update_booking(booking_id):
 
 # Delete a booking
 @bp.route('/bookings/<int:booking_id>', methods=['DELETE'])
-def delete_booking(booking_id):
+@token_required
+def delete_booking(current_user, booking_id):
     booking = Booking.query.get_or_404(booking_id)
+    if booking.user_id != current_user:
+        return jsonify({'message': 'You are not authorized to delete this booking.'}), 403
     db.session.delete(booking)
     db.session.commit()
 
@@ -203,10 +223,12 @@ def delete_booking(booking_id):
 
 # Update a review
 @bp.route('/reviews/<int:review_id>', methods=['PUT'])
-def update_review(review_id):
-    data = request.get_json()
+@token_required
+def update_review(current_user, review_id):
     review = Review.query.get_or_404(review_id)
-
+    if review.user_id != current_user:
+        return jsonify({'message': 'You are not authorized to edit this review.'}), 403
+    data = request.get_json()
     # Update review fields
     review.rating = data.get('rating', review.rating)
     review.review_text = data.get('review_text', review.review_text)
@@ -223,8 +245,11 @@ def update_review(review_id):
 
 # Delete a review
 @bp.route('/reviews/<int:review_id>', methods=['DELETE'])
+@token_required
 def delete_review(review_id):
     review = Review.query.get_or_404(review_id)
+    if review.user_id != current_user:
+        return jsonify({'message': 'You are not authorized to delete this review.'}), 403
     db.session.delete(review)
     db.session.commit()
 
@@ -347,3 +372,22 @@ def update_tour(tour_id):
         }
     }), 200
 
+
+@bp.route('/reviews/recent/5star', methods=['GET'])
+def get_recent_5star_review():
+    # Fetch the most recent 5-star review
+    review = Review.query.filter_by(rating=5).order_by(Review.created_at.desc()).first()
+    if review:
+        # Fetch the user associated with the review
+        user = User.query.get(review.user_id)
+        if user:
+            return jsonify({
+                'username': user.username,
+                'review_text': review.review_text,
+                'rating': review.rating,
+                'created_at': review.created_at
+            })
+        else:
+            return jsonify({'message': 'User not found'}), 404
+    else:
+        return jsonify({'message': 'No 5-star reviews found'}), 404

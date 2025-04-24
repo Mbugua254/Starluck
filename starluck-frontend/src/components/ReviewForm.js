@@ -1,22 +1,23 @@
 // src/components/ReviewForm.js
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import './ReviewForm.css';
 
-const ReviewForm = () => {
-  const { tourId } = useParams();
-  const navigate = useNavigate();
-  const [rating, setRating] = useState(5); // Default rating is 5
-  const [reviewText, setReviewText] = useState('');
-  const [userId, setUserId] = useState(null); // User ID should come from auth context
+const ReviewForm = ({ tourId, userId, reviewId = null, existingReview = null }) => {
+  const [rating, setRating] = useState(existingReview ? existingReview.rating : 0);
+  const [hover, setHover] = useState(0);
+  const [reviewText, setReviewText] = useState(existingReview ? existingReview.review_text : '');
 
   useEffect(() => {
-    // Retrieve the userId from context or login state
-    setUserId(1); // Placeholder for demo purposes
-  }, []);
+    if (existingReview) {
+      setRating(existingReview.rating);
+      setReviewText(existingReview.review_text);
+    }
+  }, [existingReview]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     const reviewData = {
       user_id: userId,
       tour_id: tourId,
@@ -24,43 +25,74 @@ const ReviewForm = () => {
       review_text: reviewText,
     };
 
-    axios
-      .post('http://localhost:5000/reviews', reviewData)
-      .then((response) => {
-        alert('Review submitted successfully!');
-        navigate(`/tours/${tourId}`);
-      })
-      .catch((error) => {
-        console.error('Error submitting review:', error);
-        alert('Failed to submit review.');
-      });
+    try {
+      if (reviewId) {
+        // Update existing review
+        await axios.put(`http://127.0.0.1:5000/reviews/${reviewId}`, reviewData);
+        alert('Review updated successfully!');
+      } else {
+        // Create new review
+        await axios.post('http://127.0.0.1:5000/reviews', reviewData);
+        alert('Review created successfully!');
+      }
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      alert('Failed to submit review.');
+    }
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete this review?')) {
+      try {
+        await axios.delete(`http://127.0.0.1:5000/reviews/${reviewId}`);
+        alert('Review deleted successfully!');
+        // Optionally, redirect or update UI after deletion
+      } catch (error) {
+        console.error('Error deleting review:', error);
+        alert('Failed to delete review.');
+      }
+    }
   };
 
   return (
-    <div>
-      <h2>Leave a Review</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Rating</label>
-          <input
-            type="number"
-            value={rating}
-            min="1"
-            max="5"
-            onChange={(e) => setRating(e.target.value)}
-          />
+    <form onSubmit={handleSubmit}>
+      <div className="rating-stars">
+        <label>Rating:</label>
+        <div className="stars">
+          {[...Array(5)].map((_, index) => {
+            const starValue = index + 1;
+            return (
+              <span
+                key={index}
+                className={`star ${starValue <= (hover || rating) ? 'filled' : ''}`}
+                onClick={() => setRating(starValue)}
+                onMouseEnter={() => setHover(starValue)}
+                onMouseLeave={() => setHover(0)}
+              >
+                &#9733;
+              </span>
+            );
+          })}
         </div>
-        <div>
-          <label>Review</label>
-          <textarea
-            value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
-            rows="4"
-          ></textarea>
-        </div>
-        <button type="submit">Submit Review</button>
-      </form>
-    </div>
+      </div>
+
+      <div>
+        <label>Review:</label>
+        <textarea
+          value={reviewText}
+          onChange={(e) => setReviewText(e.target.value)}
+          required
+        />
+      </div>
+
+      <button type="submit" className="book-btn">{reviewId ? 'Update Review' : 'Submit Review'}</button>
+
+      {reviewId && (
+        <button type="button" className="delete-btn" onClick={handleDelete}>
+          Delete Review
+        </button>
+      )}
+    </form>
   );
 };
 
