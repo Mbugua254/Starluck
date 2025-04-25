@@ -434,7 +434,7 @@ def delete_tour(tour_id):
 
 
 @bp.route('/bookings/<int:booking_id>/confirm', methods=['PATCH'])
-@admin_required  # Admin-only access
+
 def confirm_booking(booking_id):
     booking = Booking.query.get_or_404(booking_id)
 
@@ -451,3 +451,4 @@ def confirm_booking(booking_id):
         'status': booking.status,
         'payment_status': booking.payment_status
     }), 200
+
