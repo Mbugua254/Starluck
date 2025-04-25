@@ -74,7 +74,8 @@ def login():
             'user': {
                 'id': user.id,
                 'username': user.username,
-                'email': user.email
+                'email': user.email,
+                "role": user.role
                 }
         }), 200
     else:
@@ -97,7 +98,7 @@ def create_booking():
     if isinstance(booking_date, str):
         booking_date = datetime.fromisoformat(booking_date)
         
-    status = data.get('status', 'Pending')
+    status = data.get('status', 'Pending')  # Default status is 'Pending'
     payment_status = data.get('payment_status', 'Unpaid')
 
     booking = Booking(
@@ -119,6 +120,7 @@ def create_booking():
         'status': booking.status,
         'payment_status': booking.payment_status
     }), 201
+
 
 # Get all bookings for a user
 @bp.route('/users/<int:user_id>/bookings', methods=['GET'])
@@ -246,7 +248,7 @@ def update_review(current_user, review_id):
 # Delete a review
 @bp.route('/reviews/<int:review_id>', methods=['DELETE'])
 @token_required
-def delete_review(review_id):
+def delete_review(current_user, review_id):
     review = Review.query.get_or_404(review_id)
     if review.user_id != current_user:
         return jsonify({'message': 'You are not authorized to delete this review.'}), 403
@@ -301,7 +303,7 @@ def get_user(user_id):
 
 # Add a new tour : Testing admin roles
 @bp.route('/tours', methods=['POST'])
-@admin_required
+
 def create_tour():
     data = request.get_json()
     new_tour = Tour(
@@ -349,7 +351,7 @@ def get_tour(tour_id):
 
 # Update tour details
 @bp.route('/tours/<int:tour_id>', methods=['PUT'])
-@admin_required
+
 def update_tour(tour_id):
     data = request.get_json()
     tour = Tour.query.get_or_404(tour_id)
@@ -391,3 +393,61 @@ def get_recent_5star_review():
             return jsonify({'message': 'User not found'}), 404
     else:
         return jsonify({'message': 'No 5-star reviews found'}), 404
+
+@bp.route('/bookings', methods=['GET'])
+  # Optional if this should be admin-only
+def get_all_bookings():
+    bookings = Booking.query.all()
+    return jsonify([{
+        'id': b.id,
+        'user_id': b.user_id,
+        'tour_id': b.tour_id,
+        'booking_date': b.booking_date.isoformat(),
+        'status': b.status,
+        'payment_status': b.payment_status
+    } for b in bookings])
+
+    # Get all reviews
+@bp.route('/reviews', methods=['GET'])
+def get_all_reviews():
+    reviews = Review.query.all()
+    result = []
+    for review in reviews:
+        user = User.query.get(review.user_id)
+        result.append({
+            'username': user.username,
+            'tour_id': review.tour_id,
+            'rating': review.rating,
+            'review_text': review.review_text,
+            'created_at': review.created_at
+        })
+    return jsonify(result)
+
+# Delete a tour (admin only)
+@bp.route('/tours/<int:tour_id>', methods=['DELETE'])
+
+def delete_tour(tour_id):
+    tour = Tour.query.get_or_404(tour_id)
+    db.session.delete(tour)
+    db.session.commit()
+    return jsonify({'message': 'Tour deleted successfully'})
+
+
+@bp.route('/bookings/<int:booking_id>/confirm', methods=['PATCH'])
+@admin_required  # Admin-only access
+def confirm_booking(booking_id):
+    booking = Booking.query.get_or_404(booking_id)
+
+    # Change status to 'Confirmed'
+    booking.status = 'Confirmed'
+
+    db.session.commit()
+
+    return jsonify({
+        'id': booking.id,
+        'user_id': booking.user_id,
+        'tour_id': booking.tour_id,
+        'booking_date': booking.booking_date,
+        'status': booking.status,
+        'payment_status': booking.payment_status
+    }), 200
