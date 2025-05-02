@@ -179,7 +179,7 @@ def get_tour_reviews(tour_id):
     for review in reviews:
         user = User.query.get(review.user_id)
         result.append({
-            'username': user.username,
+            'username': user.username if user else "Deleted User",
             'review_text': review.review_text,
             'rating': review.rating
         })
