@@ -11,6 +11,9 @@ import Navigation from './components/Navigation';
 import Login from './components/Login';
 import Register from './components/Register';
 import PrivateRoute from './components/PrivateRoute';
+import AdminDashboard from './components/AdminDashboard';
+import AdminRoute from './components/AdminRoute';
+
 
 const App = () => {
   return (
@@ -26,6 +29,7 @@ const App = () => {
         <Route path="/tours/:id/review" element={<ReviewForm />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/admin-dashboard" element={<AdminDashboard />} />
 
         {/*Restricted*/}
         <Route
@@ -36,9 +40,19 @@ const App = () => {
             </PrivateRoute>
         }
         />
+        <Route
+        path="/admin-dashboard"
+        element={
+          <AdminRoute>
+            <AdminDashboard />
+            </AdminRoute>
+    }
+  />
       </Routes>
     </Router>
+    
     </AuthProvider>
+    
   );
 }
 

@@ -1,36 +1,71 @@
-.active {
-    font-weight: bold;
-    color: blue;
-  }
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 32px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  gap: 32px;
+}
 
-  nav {
-    background-color: #333;
-    padding: 10px;
-    position: relative;
-    z-index: 10;
-    padding: 10px;
-    align-items: center;
-    justify-content: center;
-    display: flex;
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-    display: flex;
-  }
-  
-  li {
-    display: inline;
-    margin-right: 20px;
-  }
-  
-  a {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
-  }
-  
-  a:hover {
-    color: #f0f0f0;
-  }
+.logo {
+  flex-shrink: 0;
+}
+
+.nav-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  gap: 48px;
+}
+
+.contdetails {
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  color: #333;
+}
+
+.nav-links {
+  display: flex;
+  list-style: none;
+  gap: 24px;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-links li a {
+  text-decoration: none;
+  color: black;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.nav-links li a.active,
+.nav-links li a:hover {
+  color: #ff4500;
+}
+
+.social-icons {
+  display: flex;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.social-icons a {
+  color: black;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: #ff4500;
+}
+.logo img {
+  height: 50px; /* Reduce the logo size */
+  width: auto;
+}

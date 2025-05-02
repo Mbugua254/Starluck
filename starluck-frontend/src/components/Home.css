@@ -1,9 +1,12 @@
 /* General Reset */
+.home{
+  font-family: 'Poppins', sans-serif;
+}
 body, html {
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f9f9f9;
+  font-family: 'Poppins', sans-serif;
+  background-color: white;
   color: #333;
 }
 
@@ -25,18 +28,19 @@ p {
 
 /* Hero Section */
 .hero {
-  background-image: url('../assets/Vacation.jpg'); /* if it's inside src */
+  background-image: url('../assets/Hero.jpg'); /* if it's inside src */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  height: 500px;
+  height: 589px;
   color: white;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  padding: 2rem;
+  padding: 0;
+  margin: 0;
 }
 .hero::before {
   content: '';
@@ -56,6 +60,11 @@ p {
 .hero p{
   color: white;
 }
+.hero img{
+  width: 100%;
+  height: 100%; /* Ensure the image fills the entire container */
+  object-fit: cover;
+}
 
 .btn-primary {
   padding: 0.75rem 1.5rem;
@@ -69,13 +78,17 @@ p {
 }
 
 .btn-primary:hover {
-  background-color: #e0e0e0;
+  background-color: #ff4500;
+  color: white;
 }
 
 /* About Section */
 .about {
   background-color: #fff;
   margin-top: 40px;
+}
+.about p{
+  color: black;
 }
 
 /* Popular Tours */
@@ -112,6 +125,7 @@ p {
 
 .card p {
   margin: 0 1rem 1.5rem;
+  color: black;
 }
 
 /* How It Works */
@@ -131,6 +145,9 @@ p {
 }
 
 /* Testimonials */
+.testimonials p{
+  color: black;
+}
 .testimonials blockquote {
   font-style: italic;
   max-width: 600px;
@@ -163,7 +180,8 @@ p {
 }
 
 .btn-secondary:hover {
-  background-color: #e0e0e0;
+  background-color: #ff4500;
+  color: white;
 }
 
 /* Footer */
@@ -173,6 +191,11 @@ p {
   text-align: center;
   font-size: 0.9rem;
   color: #777;
+  background-color: white;
+}
+.footer p{
+  color: black;
+  font-weight: bold;
 }
 .stars-display {
   color: gold;
@@ -185,5 +208,86 @@ p {
 
 .star {
   color: #ccc;
+}
+.contact {
+  background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+  padding: 80px 20px;
+  text-align: center;
+  color: #333;
+}
+
+.contact h2 {
+  font-size: 2.8rem;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.contact p {
+  font-size: 1.1rem;
+  margin-bottom: 40px;
+  color: #555;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contact-form {
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 16px;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: #f9f9f9;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  outline: none;
+  background: #fff;
+}
+
+.contact-form button {
+  background: linear-gradient(to right, #007bff, #00c6ff);
+  color: white;
+  border: none;
+  padding: 14px 28px;
+  font-size: 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  width: 100%;
+  font-family: 'Poppins', sans-serif;
+}
+
+.contact-form button:hover {
+  transform: translateY(-2px);
+  background-color: #ff4500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .contact h2 {
+    font-size: 2rem;
+  }
+
+  .contact-form {
+    padding: 30px 20px;
+  }
 }
 

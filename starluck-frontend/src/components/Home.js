@@ -7,6 +7,7 @@ import Paris from '../assets/Paris.jpg';
 import Safaris from '../assets/Safaris.jpg';
 import Bali from '../assets/Bali.jpg';
 
+
 const Home = () => {
   const [recentReview, setRecentReview] = useState(null);
 
@@ -93,8 +94,23 @@ const Home = () => {
         <Link to="/tours" className="btn-secondary">Explore Tours</Link>
       </section>
 
+      {/* Contact Section */}
+<section className="contact">
+  <h2>Contact Us</h2>
+  <p>We’d love to hear from you. Fill out the form below and we’ll get back to you shortly.</p>
+  <div className="contact-form">
+    <input type="text" placeholder="Your Name" />
+    <input type="email" placeholder="Your Email" />
+    <textarea rows="5" placeholder="Your Message"></textarea>
+    <button type="submit">Send Message</button>
+  </div>
+</section>
+
+
       {/* Footer */}
       <footer className="footer">
+        <p>Email: info@starlucktravel.com</p>
+        <p>Contact: 0769065557</p>
         <p>© {new Date().getFullYear()} Starluck Tours. All rights reserved.</p>
       </footer>
     </div>

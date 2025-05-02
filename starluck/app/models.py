@@ -38,17 +38,26 @@ class Tour(db.Model):
     def __repr__(self):
         return f'<Tour {self.name}>'
 
-# Booking Model
 class Booking(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     tour_id = db.Column(db.Integer, db.ForeignKey('tour.id'), nullable=False)
     booking_date = db.Column(db.DateTime, default=db.func.current_timestamp())
     status = db.Column(db.String(50), nullable=False, default='pending')
-    payment_status = db.Column(db.String(50), nullable=False, default='pending')
-
+    
     def __repr__(self):
         return f'<Booking {self.id}>'
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'tour_id': self.tour_id,
+            'booking_date': self.booking_date.isoformat() if self.booking_date else None,
+            'status': self.status,
+            
+        }
+
 
 # Review Model
 class Review(db.Model):

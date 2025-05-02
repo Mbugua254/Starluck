@@ -1,9 +1,8 @@
-// src/components/ReviewForm.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './ReviewForm.css';
 
-const ReviewForm = ({ tourId, userId, reviewId = null, existingReview = null }) => {
+const ReviewForm = ({ tourId, userId, reviewId = null, existingReview = null, onReviewAction }) => {
   const [rating, setRating] = useState(existingReview ? existingReview.rating : 0);
   const [hover, setHover] = useState(0);
   const [reviewText, setReviewText] = useState(existingReview ? existingReview.review_text : '');
@@ -28,12 +27,14 @@ const ReviewForm = ({ tourId, userId, reviewId = null, existingReview = null }) 
     try {
       if (reviewId) {
         // Update existing review
-        await axios.put(`http://127.0.0.1:5000/reviews/${reviewId}`, reviewData);
+        const response = await axios.put(`http://127.0.0.1:5000/reviews/${reviewId}`, reviewData);
         alert('Review updated successfully!');
+        onReviewAction('update', response.data); // Update the parent component state
       } else {
         // Create new review
-        await axios.post('http://127.0.0.1:5000/reviews', reviewData);
+        const response = await axios.post('http://127.0.0.1:5000/reviews', reviewData);
         alert('Review created successfully!');
+        onReviewAction('create', response.data); // Update the parent component state
       }
     } catch (error) {
       console.error('Error submitting review:', error);
@@ -46,7 +47,7 @@ const ReviewForm = ({ tourId, userId, reviewId = null, existingReview = null }) 
       try {
         await axios.delete(`http://127.0.0.1:5000/reviews/${reviewId}`);
         alert('Review deleted successfully!');
-        // Optionally, redirect or update UI after deletion
+        onReviewAction('delete', reviewId); // Update the parent component state
       } catch (error) {
         console.error('Error deleting review:', error);
         alert('Failed to delete review.');

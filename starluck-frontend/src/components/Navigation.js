@@ -1,6 +1,8 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './Navigation.css';
+import { FaFacebookF, FaInstagram, FaTiktok, FaTwitter } from 'react-icons/fa';
+import Logo from '../assets/Logo.gif'; // Add your logo to /assets and import it
 
 const Navigation = () => {
   const navigate = useNavigate();
@@ -8,12 +10,26 @@ const Navigation = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('user');
+    localStorage.removeItem('token');
     navigate('/');
   };
 
   return (
-    <nav>
-      <ul>
+    <nav className="navbar">
+      {/* Logo */}
+      <div className="logo">
+        <NavLink to="/">
+          <img src={Logo} alt="Starluck Tours Logo" />
+        </NavLink>
+      </div>
+      <div className='nav-content'>
+      {/*<div className='contdetails'>
+      <p>info@starlucktravel.com</p>
+      <p>+254 769 065 557</p>
+      </div>*/}
+
+      {/* Navigation Links */}
+      <ul className="nav-links">
         <li>
           <NavLink to="/" end className={({ isActive }) => (isActive ? 'active' : '')}>
             Home
@@ -24,6 +40,7 @@ const Navigation = () => {
             Tours
           </NavLink>
         </li>
+
         {!user ? (
           <>
             <li>
@@ -39,23 +56,37 @@ const Navigation = () => {
           </>
         ) : (
           <>
+            {user.role === 'admin' ? (
+              <li>
+                <NavLink to="/admin-dashboard" className={({ isActive }) => (isActive ? 'active' : '')}>
+                  Admin Dashboard
+                </NavLink>
+              </li>
+            ) : (
+              <li>
+                <NavLink to="/user-dashboard" className={({ isActive }) => (isActive ? 'active' : '')}>
+                  Dashboard
+                </NavLink>
+              </li>
+            )}
+
             <li>
-              <NavLink to="/user-dashboard" className={({ isActive }) => (isActive ? 'active' : '')}>
-                Dashboard
+              <NavLink to="/" onClick={handleLogout}>
+                Logout
               </NavLink>
             </li>
-            <li>
-  <NavLink
-    to="/"
-    onClick={handleLogout}
-    className={({ isActive }) => (isActive ? 'active' : '')}
-  >
-    Logout
-  </NavLink>
-</li>
           </>
         )}
       </ul>
+      </div>
+      
+
+      {/* Social Media Icons */}
+      <div className="social-icons">
+        <a href="https://www.facebook.com/starlucktrv/" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
+        <a href="https://www.instagram.com/starluck_travel/" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+        <a href="https://www.tiktok.com/@starlucktravelke?is_from_webapp=1&sender_device=pc" target="_blank" rel="noopener noreferrer"><FaTiktok /></a>
+      </div>
     </nav>
   );
 };

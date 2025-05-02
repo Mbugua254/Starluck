@@ -40,8 +40,8 @@ with app.app_context():
     db.session.add_all([admin_user, user1, user2])
 
     # Seed Tours
-    tour1 = Tour(name='Paris Adventure', location='Paris, France', description='A wonderful tour of Paris!', price=100, image_url="../assets/Paris.jpg")
-    tour2 = Tour(name='Rome Discovery', location='Rome, Italy', description='Explore the beauty of ancient Rome!', price=120, image_url="../assets/Rome.jpg")
+    tour1 = Tour(name='Paris Adventure', location='Paris, France', description='A wonderful tour of Paris!', price=100, image_url="/images/Pari.jpg")
+    tour2 = Tour(name='Rome Discovery', location='Rome, Italy', description='Explore the beauty of ancient Rome!', price=120, image_url="/images/Rome.jpg")
     db.session.add_all([tour1, tour2])
 
     # Commit changes

@@ -1,0 +1,145 @@
+/* AdminDashboard.css */
+
+/* Overall Layout */
+.admin-dashboard {
+  display: flex;
+  padding: 2rem;
+  font-family: 'Poppins', sans-serif;
+  background-color: #f9fafb;
+}
+
+.side-menu {
+  width: 220px;  /* Ensure proper width for the sidebar */
+  background-color: #0077cc;
+  padding: 1rem;
+  color: white;
+  border-radius: 12px;
+  margin-right: 2rem;
+  display: flex;
+  flex-direction: column;  /* Stack items vertically */
+  height: 100vh;  /* Ensure it fills the vertical height */
+  box-sizing: border-box;  /* Ensure padding is included in the width */
+  overflow-y: auto;  /* Prevent overflow of content */
+}
+
+.side-menu h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.side-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;  /* Stack the items vertically */
+  gap: 1rem;
+}
+
+.side-menu li {
+  cursor: pointer;
+  padding: 1rem;
+  background-color: #005fa3;
+  border-radius: 6px;
+  transition: background-color 0.3s;
+  text-align: center;
+  width: 100%;  /* Ensure each item spans the full width */
+  box-sizing: border-box;  /* Ensure padding is included in the width */
+}
+
+.side-menu li:hover {
+  background-color: #003d7a;
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 2rem;
+  overflow-x: hidden;  /* Prevent horizontal overflow */
+  overflow-y: auto;  /* Enable scrolling for large content */
+}
+
+/* Dashboard Styles */
+.dashboard-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.dashboard-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-4px);
+}
+
+.dashboard-card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #0077cc;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 0.5rem;
+}
+
+.dashboard-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+
+.dashboard-card li {
+  color: #444;
+  padding: 1rem;
+  background-color: #f1f5f9;
+  border-radius: 6px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  display: block;
+}
+
+.dashboard-card li strong {
+  color: #0077cc;
+}
+
+.dashboard-card ul {
+  max-height: 400px;
+  overflow-y: auto;
+}
+/* Style for the stars */
+.dashboard-card li {
+  color: #444;
+  padding: 1rem;
+  background-color: #f1f5f9;
+  border-radius: 6px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  display: block;
+}
+
+.dashboard-card li strong {
+  color: #0077cc;
+}
+
+.dashboard-card li .star-rating {
+  font-size: 1.2rem;
+  color: #ffcc00;  /* Yellow stars */
+}
+.dashboard-card button {
+  margin-top: 0.3rem;
+  margin-right: 0.3rem;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.9rem;
+}
+
+.dashboard-card form input {
+  margin-bottom: 0.3rem;
+}

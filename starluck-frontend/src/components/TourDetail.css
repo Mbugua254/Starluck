@@ -5,7 +5,7 @@
     background-color: #ffffff;
     border-radius: 12px;
     box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Poppins', sans-serif;
   }
   
   .tour-card {
@@ -112,7 +112,10 @@
   }
   
   .back-link:hover {
-    text-decoration: underline;
+    text-decoration: none;
+    background-color: #ff4500;
+    color: white;
+    border-radius: 5px;
   }
   
   .tour-loading {
@@ -121,4 +124,63 @@
     color: #666;
     margin-top: 4rem;
   }
+  .tour-average-rating {
+    margin-top: 10px;
+    font-size: 18px;
+    color: #f39c12; /* golden yellow */
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  
+  .tour-average-rating::before {
+    content: '⭐';
+    font-size: 20px;
+  }
+  /* TourDetail.css */
+
+/* Styling for the review actions (Edit/Delete buttons) */
+.review-actions {
+  margin-top: 10px;
+}
+
+.edit-btn,
+.delete-btn {
+  padding: 6px 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.edit-btn {
+  background-color: #4CAF50; /* Green for Edit */
+  color: white;
+}
+
+.delete-btn {
+  background-color: #f44336; /* Red for Delete */
+  color: white;
+}
+
+.edit-btn:hover,
+.delete-btn:hover {
+  opacity: 0.8; /* Hover effect */
+}
+
+.edit-btn:focus,
+.delete-btn:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.edit-btn:disabled,
+.delete-btn:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
   

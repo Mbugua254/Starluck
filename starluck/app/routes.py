@@ -6,11 +6,20 @@ from datetime import datetime
 from werkzeug.security import generate_password_hash, check_password_hash  # Import this to check passwords
 import jwt  # For JWT handling
 from datetime import timedelta  # For token expiration time
+from flask import redirect, url_for
+from flask import send_from_directory
+import os
+from werkzeug.utils import secure_filename
 
 bp = Blueprint('api', __name__)
 
 # Secret key for encoding/decoding JWT (should be kept secret and secure)
 SECRET_KEY = 'your_secret_key'
+
+#Folder that stores images
+UPLOAD_FOLDER = os.path.abspath('../starluck-frontend/public/images')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
 
 #Authenticated users only
 def token_required(f):
@@ -99,14 +108,14 @@ def create_booking():
         booking_date = datetime.fromisoformat(booking_date)
         
     status = data.get('status', 'Pending')  # Default status is 'Pending'
-    payment_status = data.get('payment_status', 'Unpaid')
+    
 
     booking = Booking(
         user_id=user_id,
         tour_id=tour_id,
         booking_date=booking_date,
         status=status,
-        payment_status=payment_status
+        
     )
 
     db.session.add(booking)
@@ -118,7 +127,7 @@ def create_booking():
         'tour_id': booking.tour_id,
         'booking_date': booking.booking_date,
         'status': booking.status,
-        'payment_status': booking.payment_status
+        
     }), 201
 
 
@@ -132,7 +141,7 @@ def get_user_bookings(user_id):
         'tour_id': booking.tour_id,
         'booking_date': booking.booking_date,
         'status': booking.status,
-        'payment_status': booking.payment_status
+        
     } for booking in bookings])
 
 # Create a new review
@@ -198,7 +207,7 @@ def update_booking(current_user, booking_id):
     data = request.get_json()
     # Update booking fields
     booking.status = data.get('status', booking.status)
-    booking.payment_status = data.get('payment_status', booking.payment_status)
+    
 
     db.session.commit()
 
@@ -208,7 +217,7 @@ def update_booking(current_user, booking_id):
         'tour_id': booking.tour_id,
         'booking_date': booking.booking_date,
         'status': booking.status,
-        'payment_status': booking.payment_status
+        
     })
 
 # Delete a booking
@@ -301,30 +310,104 @@ def get_user(user_id):
         'email': user.email
     })
 
-# Add a new tour : Testing admin roles
+#New Tours With Images
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 @bp.route('/tours', methods=['POST'])
-
+  # Optional: Use this if you want to restrict access to admin users only
 def create_tour():
-    data = request.get_json()
-    new_tour = Tour(
-        name=data['name'],
-        location=data['location'],
-        description=data['description'],
-        price=data['price']
-    )
-    db.session.add(new_tour)
-    db.session.commit()
+    # Get text fields from form data
+    name = request.form.get('name')
+    location = request.form.get('location')
+    description = request.form.get('description')
+    price = request.form.get('price')
+    
+    # Get image file
+    file = request.files.get('image')
 
-    return jsonify({
-        'message': 'Tour created successfully',
-        'tour': {
+    if file and allowed_file(file.filename):
+        # Secure the filename and save it
+        filename = secure_filename(file.filename)
+        image_path = os.path.join(UPLOAD_FOLDER, filename)
+
+        # Save the image
+        file.save(image_path)
+
+        # Construct image URL (Assuming the images are publicly accessible)
+        image_url = f"/images/{filename}"
+
+        # Create the tour record
+        new_tour = Tour(
+            name=name,
+            location=location,
+            description=description,
+            price=price,
+            image_url=image_url  # Save the image URL in the database
+        )
+
+        db.session.add(new_tour)
+        db.session.commit()
+
+        # Return the response with the tour data and image URL
+        return jsonify({
             'id': new_tour.id,
             'name': new_tour.name,
             'location': new_tour.location,
             'description': new_tour.description,
-            'price': new_tour.price
-        }
-    }), 201
+            'price': new_tour.price,
+            'image_url': new_tour.image_url  # Return the image URL in the response
+        }), 201
+    else:
+        return jsonify({'message': 'Invalid file format'}), 400
+
+# Add a new tour : Testing admin roles
+#@bp.route('/tours', methods=['POST'])
+#def create_tour():
+    # Get text fields from form data
+    
+    #name = request.form.get('name')
+    #location = request.form.get('location')
+    #description = request.form.get('description')
+    #price = request.form.get('price')
+    
+    # Get image file
+    
+    #image = request.files.get('image')
+    
+    # Handle image saving (this assumes you have a folder called 'uploads')
+    
+    #image_url = None
+    #if image:
+        #filename = image.filename
+        #filepath = f'images/{filename}'
+        #image.save(filepath)
+        #image_url = filepath  # Or generate full URL if needed
+
+    # Create new tour object
+    
+    #new_tour = Tour(
+        #name=name,
+        #location=location,
+        #description=description,
+        #price=price,
+        #image_url=image_url
+    #)
+
+    #db.session.add(new_tour)
+    #db.session.commit()
+
+    #return jsonify({
+        #'message': 'Tour created successfully',
+        #'tour': {
+            #'id': new_tour.id,
+            #'name': new_tour.name,
+            #'location': new_tour.location,
+            #'description': new_tour.description,
+            #'price': new_tour.price,
+            #'image_url': new_tour.image_url
+        #}
+    #}), 201
 # Get all tours
 @bp.route('/tours', methods=['GET'])
 def get_tours():
@@ -334,7 +417,8 @@ def get_tours():
         'name': tour.name,
         'location': tour.location,
         'description': tour.description,
-        'price': tour.price
+        'price': tour.price,
+        'image_url': tour.image_url
     } for tour in tours])
 
 # Get a specific tour
@@ -346,7 +430,8 @@ def get_tour(tour_id):
         'name': tour.name,
         'location': tour.location,
         'description': tour.description,
-        'price': tour.price
+        'price': tour.price,
+        'image_url': tour.image_url
     })
 
 # Update tour details
@@ -360,6 +445,9 @@ def update_tour(tour_id):
     tour.location = data.get('location', tour.location)
     tour.description = data.get('description', tour.description)
     tour.price = data.get('price', tour.price)
+    tour.image_url = data.get('image_url', tour.image_url)
+
+    
 
     db.session.commit()
 
@@ -370,7 +458,8 @@ def update_tour(tour_id):
             'name': tour.name,
             'location': tour.location,
             'description': tour.description,
-            'price': tour.price
+            'price': tour.price,
+            'image_url': tour.image_url
         }
     }), 200
 
@@ -404,7 +493,7 @@ def get_all_bookings():
         'tour_id': b.tour_id,
         'booking_date': b.booking_date.isoformat(),
         'status': b.status,
-        'payment_status': b.payment_status
+        
     } for b in bookings])
 
     # Get all reviews
@@ -414,6 +503,8 @@ def get_all_reviews():
     result = []
     for review in reviews:
         user = User.query.get(review.user_id)
+        if not user:
+            continue
         result.append({
             'username': user.username,
             'tour_id': review.tour_id,
@@ -433,22 +524,49 @@ def delete_tour(tour_id):
     return jsonify({'message': 'Tour deleted successfully'})
 
 
-@bp.route('/bookings/<int:booking_id>/confirm', methods=['PATCH'])
 
-def confirm_booking(booking_id):
-    booking = Booking.query.get_or_404(booking_id)
 
-    # Change status to 'Confirmed'
-    booking.status = 'Confirmed'
-
+@bp.route('/bookings/<int:id>/confirm', methods=['PATCH'])
+def confirm_booking(id):
+    booking = Booking.query.get_or_404(id)
+    booking.status = 'confirmed'
     db.session.commit()
+    return jsonify({'message': 'Booking confirmed.', 'booking': booking.serialize()}), 200
 
-    return jsonify({
-        'id': booking.id,
-        'user_id': booking.user_id,
-        'tour_id': booking.tour_id,
-        'booking_date': booking.booking_date,
-        'status': booking.status,
-        'payment_status': booking.payment_status
-    }), 200
+
+    #serve images manually
+
+@bp.route('/images/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(UPLOAD_FOLDER, filename)
+
+#route to handle image uploads
+
+@bp.route('/upload', methods=['POST'])
+@token_required
+def upload_file(current_user):
+    if 'file' not in request.files:
+        return jsonify({'message': 'No file part'}), 400
+
+    file = request.files['file']
+    
+    if file.filename == '':
+        return jsonify({'message': 'No selected file'}), 400
+
+    if file and allowed_file(file.filename):
+        filename = file.filename
+        file.save(os.path.join(UPLOAD_FOLDER, filename))
+        return jsonify({'message': 'File uploaded successfully', 'filename': filename}), 200
+    else:
+        return jsonify({'message': 'Invalid file type'}), 400
+
+
+#cancel a booking
+@bp.route('/bookings/<int:booking_id>/cancel', methods=['PATCH'])
+
+def cancel_booking(booking_id):
+    booking = Booking.query.get_or_404(booking_id)
+    booking.status = 'cancelled'
+    db.session.commit()
+    return jsonify({'message': 'Booking cancelled successfully', 'booking': booking.serialize()})
 

@@ -1,97 +1,118 @@
+/* TourList.css */
+
 .tour-list-container {
   max-width: 1200px;
-  margin: 3rem auto;
-  padding: 0 1rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #f9f9f9;
+  min-height: 100vh;
+  font-family: 'Poppins', sans-serif;
 }
 
 .tour-list-heading {
-  font-size: 2.5rem;
   text-align: center;
+  font-size: 2.5rem;
   margin-bottom: 2rem;
-  color: #2c3e50;
+  color: #333;
+}
+
+.filter-controls {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.filter-input {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  width: 250px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  font-family: 'Poppins', sans-serif;
+}
+
+.filter-input:focus {
+  outline: none;
+  border-color: #6c63ff;
+  box-shadow: 0 0 8px rgba(108, 99, 255, 0.3);
 }
 
 .destination-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
 }
 
 .destination-card {
-  background-color: #ffffff;
+  background: white;
   border-radius: 12px;
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
   padding: 1.5rem;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  border: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .destination-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
 }
 
 .tour-name {
   font-size: 1.5rem;
-  color: #34495e;
+  color: #222;
   margin-bottom: 0.5rem;
+  text-align: center;
 }
 
 .tour-description {
   font-size: 1rem;
-  color: #7f8c8d;
+  color: #555;
   margin-bottom: 1rem;
-  line-height: 1.5;
 }
 
 .tour-price {
-  font-size: 1.1rem;
-  color: #2ecc71;
-  font-weight: bold;
-  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #6c63ff;
+  margin-bottom: 0.5rem;
+}
+
+.tour-average-rating {
+  font-size: 0.95rem;
+  color: #777;
+  margin-bottom: 1.5rem;
 }
 
 .view-details-btn {
-  display: inline-block;
-  padding: 0.6rem 1.2rem;
-  background-color: #3498db;
+  padding: 0.75rem;
+  background: linear-gradient(135deg, #6c63ff, #7c8aff);
   color: white;
-  text-decoration: none;
+  font-weight: 600;
+  border: none;
   border-radius: 8px;
-  font-weight: 500;
-  transition: background-color 0.3s ease;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-family: 'Poppins', sans-serif;
 }
 
 .view-details-btn:hover {
-  background-color: #2980b9;
-}
-.reviews-list {
-  list-style: none;
-  padding: 0;
-  margin-top: 1rem;
+  background: linear-gradient(135deg, #5a54e6, #6a79f0);
 }
 
-.review-card {
-  margin-bottom: 1.5rem;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 1rem;
-}
-
-.stars-display {
-  color: gold;
+.no-results-message {
+  text-align: center;
   font-size: 1.2rem;
-  margin-bottom: 0.3rem;
-}
-
-.review-text {
-  margin: 0;
-  font-style: italic;
-  color: #444;
+  color: #999;
+  margin-top: 3rem;
 }
 .tour-image {
   width: 100%;
-  height: auto;
-  border-radius: 8px;
+  height: 200px;
   object-fit: cover;
+  border-radius: 10px;
 }

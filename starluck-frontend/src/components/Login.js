@@ -1,6 +1,6 @@
 // Login.js
 import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
 const Login = ({ onLogin }) => {
@@ -8,7 +8,6 @@ const Login = ({ onLogin }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const location = useLocation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,16 +25,19 @@ const Login = ({ onLogin }) => {
       const data = await response.json();
 
       if (response.ok) {
-        // Store token (optional, for authenticated routes)
+        // Store token and user data
         localStorage.setItem('token', data.token);
-        // Optionally store user data
         localStorage.setItem('user', JSON.stringify(data.user));
-        // Show success message
+
         alert('Login successful!');
-        // Call the parent onLogin handler if passed
         if (onLogin) onLogin(data.user);
-        // Redirect to home
-        navigate('/');
+
+        // Redirect based on user role
+        if (data.user.role === 'admin') {
+          navigate('/admin-dashboard'); // Redirect to admin dashboard
+        } else {
+          navigate('/'); // Redirect to regular user dashboard
+        }
       } else {
         setError(data.message || 'Login failed');
       }

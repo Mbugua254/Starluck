@@ -28,6 +28,7 @@ const UserDashboard = () => {
       .catch((err) => console.error('Error fetching reviews:', err));
   }, []);
 
+
   if (!user) {
     return <div className="dashboard-loading">Loading your dashboard...</div>;
   }
@@ -46,7 +47,7 @@ const UserDashboard = () => {
               <li key={booking.id} className="dashboard-item">
                 <span><strong>Tour ID:</strong> {booking.tour_id}</span>
                 <span><strong>Status:</strong> {booking.status}</span>
-                <span><strong>Payment:</strong> {booking.payment_status}</span>
+                
               </li>
             ))}
           </div>
