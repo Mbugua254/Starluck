@@ -25,7 +25,8 @@ def create_app():
     migrate.init_app(app, db)
    
 
-    CORS(app)
+
+    CORS(app, resources={r"/*": {"origins": "https://starlucktours.netlify.app/"}})  # Replace with your Netlify URL
 
     from . import routes  # Import routes after initializing app and db
     app.register_blueprint(routes.bp)  # Register Blueprint for routes
