@@ -26,7 +26,8 @@ def create_app():
    
 
 
-    CORS(app, resources={r"/*": {"origins": "https://exquisite-mandazi-3b2d69.netlify.app"}})  # Replace with your Netlify URL
+    CORS(app, origins=["https://exquisite-mandazi-3b2d69.netlify.app"], methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"], supports_credentials=True)
+  # Replace with your Netlify URL
 
     from . import routes  # Import routes after initializing app and db
     app.register_blueprint(routes.bp)  # Register Blueprint for routes
