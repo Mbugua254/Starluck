@@ -48,10 +48,10 @@ const [newTourData, setNewTourData] = useState({
       try {
         const headers = { Authorization: `Bearer ${token}` };
         const [userRes, bookingRes, reviewRes, tourRes] = await Promise.all([
-          axios.get('http://127.0.0.1:5000/users', { headers }),
-          axios.get('http://127.0.0.1:5000/bookings', { headers }),
-          axios.get('http://127.0.0.1:5000/reviews', { headers }),
-          axios.get('http://127.0.0.1:5000/tours', { headers }),
+          axios.get('https://starluck.onrender.com/users', { headers }),
+          axios.get('https://starluck.onrender.com/bookings', { headers }),
+          axios.get('https://starluck.onrender.com/reviews', { headers }),
+          axios.get('https://starluck.onrender.com/tours', { headers }),
         ]);
 
         setUsers(userRes.data);
@@ -70,7 +70,7 @@ const [newTourData, setNewTourData] = useState({
 
   const confirmBooking = async (bookingId) => {
     try {
-      await axios.patch(`http://127.0.0.1:5000/bookings/${bookingId}/confirm`, { status: 'confirmed' }, {
+      await axios.patch(`https://starluck.onrender.com/bookings/${bookingId}/confirm`, { status: 'confirmed' }, {
         headers: { Authorization: `Bearer ${token}` },
       });
   
@@ -86,7 +86,7 @@ const [newTourData, setNewTourData] = useState({
   };
   const cancelBooking = async (bookingId) => {
     try {
-      await axios.patch(`http://127.0.0.1:5000/bookings/${bookingId}/cancel`, { status: 'cancelled' }, {
+      await axios.patch(`https://starluck.onrender.com/bookings/${bookingId}/cancel`, { status: 'cancelled' }, {
         headers: { Authorization: `Bearer ${token}` },
       });
   
@@ -200,7 +200,7 @@ const [newTourData, setNewTourData] = useState({
               try {
                 const headers = { Authorization: `Bearer ${token}` };
                 const response = await axios.put(
-                  `http://127.0.0.1:5000/tours/${tour.id}`,
+                  `https://starluck.onrender.com/tours/${tour.id}`,
                   editTourData,
                   { headers }
                 );
@@ -271,7 +271,7 @@ const [newTourData, setNewTourData] = useState({
               onClick={async () => {
                 try {
                   const headers = { Authorization: `Bearer ${token}` };
-                  await axios.delete(`http://127.0.0.1:5000/tours/${tour.id}`, { headers });
+                  await axios.delete(`https://starluck.onrender.com/tours/${tour.id}`, { headers });
                   setTours(tours.filter(t => t.id !== tour.id));
                 } catch (error) {
                   console.error('Error deleting tour:', error);
@@ -312,7 +312,7 @@ const [newTourData, setNewTourData] = useState({
             'Content-Type': 'multipart/form-data'
           };
 
-          const response = await axios.post('http://127.0.0.1:5000/tours', formData, { headers });
+          const response = await axios.post('https://starluck.onrender.com/tours', formData, { headers });
           setTours([...tours, response.data]);
           setNewTourData({ name: '', description: '', price: '', location: '', image: null });
           setSelectedTab('tours');

@@ -13,7 +13,7 @@ const TourList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:5000/tours')
+    axios.get('https://starluck.onrender.com/tours')
       .then(response => {
         setTours(response.data);
       })

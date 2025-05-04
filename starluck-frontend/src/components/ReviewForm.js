@@ -27,12 +27,12 @@ const ReviewForm = ({ tourId, userId, reviewId = null, existingReview = null, on
     try {
       if (reviewId) {
         // Update existing review
-        const response = await axios.put(`http://127.0.0.1:5000/reviews/${reviewId}`, reviewData);
+        const response = await axios.put(`https://starluck.onrender.com/reviews/${reviewId}`, reviewData);
         alert('Review updated successfully!');
         onReviewAction('update', response.data); // Update the parent component state
       } else {
         // Create new review
-        const response = await axios.post('http://127.0.0.1:5000/reviews', reviewData);
+        const response = await axios.post('https://starluck.onrender.com/reviews', reviewData);
         alert('Review created successfully!');
         onReviewAction('create', response.data); // Update the parent component state
       }
@@ -45,7 +45,7 @@ const ReviewForm = ({ tourId, userId, reviewId = null, existingReview = null, on
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this review?')) {
       try {
-        await axios.delete(`http://127.0.0.1:5000/reviews/${reviewId}`);
+        await axios.delete(`https://starluck.onrender.com/reviews/${reviewId}`);
         alert('Review deleted successfully!');
         onReviewAction('delete', reviewId); // Update the parent component state
       } catch (error) {

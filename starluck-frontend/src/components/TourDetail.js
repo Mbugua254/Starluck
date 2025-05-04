@@ -17,11 +17,11 @@ const TourDetail = () => {
     if (!userData) return;
     setUser(userData);
 
-    axios.get(`http://127.0.0.1:5000/tours/${tourId}`)
+    axios.get(`https://starluck.onrender.com/tours/${tourId}`)
       .then((res) => setTour(res.data))
       .catch((err) => console.error('Error fetching tour:', err));
 
-    axios.get(`http://127.0.0.1:5000/tours/${tourId}/reviews`)
+    axios.get(`https://starluck.onrender.com/tours/${tourId}/reviews`)
       .then((res) => setReviews(res.data))
       .catch((err) => console.error('Error fetching reviews:', err));
   }, [tourId]);
@@ -40,7 +40,7 @@ const TourDetail = () => {
 
   const handleReviewSubmit = (review, isEdit = false) => {
     if (isEdit) {
-      axios.put(`http://127.0.0.1:5000/reviews/${review.id}`, review)
+      axios.put(`https://starluck.onrender.com/reviews/${review.id}`, review)
         .then((res) => {
           setReviews((prev) => prev.map((r) => (r.id === review.id ? res.data : r)));
           setEditingReview(null);
@@ -51,7 +51,7 @@ const TourDetail = () => {
           alert('Could not update review.');
         });
     } else {
-      axios.post('http://127.0.0.1:5000/reviews', review)
+      axios.post('https://starluck.onrender.com/reviews', review)
         .then((res) => {
           setReviews((prev) => [...prev, res.data]);
           alert('Review created!');
@@ -69,7 +69,7 @@ const TourDetail = () => {
 
   const handleDeleteReview = (reviewId) => {
     if (window.confirm('Are you sure you want to delete this review?')) {
-      axios.delete(`http://127.0.0.1:5000/reviews/${reviewId}`)
+      axios.delete(`https://starluck.onrender.com/reviews/${reviewId}`)
         .then(() => {
           setReviews((prevReviews) => prevReviews.filter((review) => review.id !== reviewId));
           alert('Review deleted successfully!');

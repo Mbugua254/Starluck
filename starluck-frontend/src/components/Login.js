@@ -14,7 +14,7 @@ const Login = ({ onLogin }) => {
     setError(null); // Clear any existing errors
 
     try {
-      const response = await fetch('http://127.0.0.1:5000/login', {
+      const response = await fetch('https://starluck.onrender.com/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

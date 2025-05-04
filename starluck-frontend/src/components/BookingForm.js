@@ -32,7 +32,7 @@ const BookingForm = () => {
     };
 
     try {
-      await axios.post('http://127.0.0.1:5000/bookings', bookingData);
+      await axios.post('https://starluck.onrender.com/bookings', bookingData);
       alert('Booking created! Await agent confirmation.');
       navigate('/user-dashboard');
     } catch (error) {

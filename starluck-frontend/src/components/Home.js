@@ -14,7 +14,7 @@ const Home = () => {
   useEffect(() => {
     // Fetch the most recent 5-star review
     axios
-      .get('http://127.0.0.1:5000/reviews/recent/5star')
+      .get('https://starluck.onrender.com/reviews/recent/5star')
       .then((res) => {
         console.log('Fetched recent 5-star review:', res.data);
         setRecentReview(res.data); // Set the state with the fetched review
