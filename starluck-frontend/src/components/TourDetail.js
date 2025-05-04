@@ -38,30 +38,7 @@ const TourDetail = () => {
     }
   };
 
-  const handleReviewSubmit = (review, isEdit = false) => {
-    if (isEdit) {
-      axios.put(`https://starluck.onrender.com/reviews/${review.id}`, review)
-        .then((res) => {
-          setReviews((prev) => prev.map((r) => (r.id === review.id ? res.data : r)));
-          setEditingReview(null);
-          alert('Review updated!');
-        })
-        .catch((err) => {
-          console.error('Error updating review:', err);
-          alert('Could not update review.');
-        });
-    } else {
-      axios.post('https://starluck.onrender.com/reviews', review)
-        .then((res) => {
-          setReviews((prev) => [...prev, res.data]);
-          alert('Review created!');
-        })
-        .catch((err) => {
-          console.error('Error creating review:', err);
-          alert('Could not create review.');
-        });
-    }
-  };
+  
 
   const handleEditReview = (review) => {
     setEditingReview(review);

@@ -8,7 +8,7 @@ const TourList = () => {
   const [tours, setTours] = useState([]);
   const [locationFilter, setLocationFilter] = useState('');
   const [priceFilter, setPriceFilter] = useState('');
-  const [reviews, setReviews] = useState([]);
+  //const [reviews, setReviews] = useState([]);
   
   const navigate = useNavigate();
 
@@ -49,11 +49,11 @@ const TourList = () => {
   });
 
   // Calculate average rating
-  const calculateAverageRating = () => {
-    if (reviews.length === 0) return 0;
-    const total = reviews.reduce((sum, r) => sum + r.rating, 0);
-    return (total / reviews.length).toFixed(1);
-  };
+  //const calculateAverageRating = () => {
+   // if (reviews.length === 0) return 0;
+    //const total = reviews.reduce((sum, r) => sum + r.rating, 0);
+    //return (total / reviews.length).toFixed(1);
+ // };
 
   
 
@@ -88,7 +88,7 @@ const TourList = () => {
               <h3 className="tour-name">{tour.name}</h3>
               <p className="tour-description">{tour.description.slice(0, 100)}...</p>
               <p className="tour-price">${tour.price}</p>
-              <p className="tour-average-rating"><strong>Rating:</strong> {calculateAverageRating()}</p>
+              {/*<p className="tour-average-rating"><strong>Rating:</strong> {calculateAverageRating()}</p>*/}
               <button onClick={() => handleViewDetails(tour.id)} className="view-details-btn">
                 View Details →
               </button>

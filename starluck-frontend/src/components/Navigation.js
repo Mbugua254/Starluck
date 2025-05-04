@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import './Navigation.css';
-import { FaFacebookF, FaInstagram, FaTiktok, FaTwitter } from 'react-icons/fa';
+import { FaFacebookF, FaInstagram, FaTiktok } from 'react-icons/fa';
 import Logo from '../assets/Logo.gif'; // Add your logo to /assets and import it
 
 const Navigation = () => {
