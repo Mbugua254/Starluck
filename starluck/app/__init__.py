@@ -26,7 +26,7 @@ def create_app():
    
 
 
-    CORS(app, resources={r"/*": {"origins": "https://toursatstarluck.netlify.app/"}}, supports_credentials=True)
+    CORS(app, resources={r"/*": {"origins": "https://toursatstarluck.netlify.app"}}, supports_credentials=True)
 
 
     from . import routes  # Import routes after initializing app and db
