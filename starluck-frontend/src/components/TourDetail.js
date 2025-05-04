@@ -17,11 +17,11 @@ const TourDetail = () => {
     if (!userData) return;
     setUser(userData);
 
-    axios.get(`https://starluck.onrender.com/tours/${tourId}`)
+    axios.get(`https://starlucktours.onrender.com/tours/${tourId}`)
       .then((res) => setTour(res.data))
       .catch((err) => console.error('Error fetching tour:', err));
 
-    axios.get(`https://starluck.onrender.com/tours/${tourId}/reviews`)
+    axios.get(`https://starlucktours.onrender.com/tours/${tourId}/reviews`)
       .then((res) => setReviews(res.data))
       .catch((err) => console.error('Error fetching reviews:', err));
   }, [tourId]);
@@ -46,7 +46,7 @@ const TourDetail = () => {
 
   const handleDeleteReview = (reviewId) => {
     if (window.confirm('Are you sure you want to delete this review?')) {
-      axios.delete(`https://starluck.onrender.com/reviews/${reviewId}`)
+      axios.delete(`https://starlucktours.onrender.com/reviews/${reviewId}`)
         .then(() => {
           setReviews((prevReviews) => prevReviews.filter((review) => review.id !== reviewId));
           alert('Review deleted successfully!');

@@ -13,7 +13,7 @@ const TourList = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('https://starluck.onrender.com/tours')
+    axios.get('https://starlucktours.onrender.com/tours')
       .then(response => {
         setTours(response.data);
       })

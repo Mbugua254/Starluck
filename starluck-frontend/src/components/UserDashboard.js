@@ -18,12 +18,12 @@ const UserDashboard = () => {
     setUser({ id: userData.id, name: userData.username });
 
     axios
-      .get(`https://starluck.onrender.com/users/${userData.id}/bookings`)
+      .get(`https://starlucktours.onrender.com/users/${userData.id}/bookings`)
       .then((res) => setBookings(res.data))
       .catch((err) => console.error('Error fetching bookings:', err));
 
     axios
-      .get(`https://starluck.onrender.com/users/${userData.id}/reviews`)
+      .get(`https://starlucktours.onrender.com/users/${userData.id}/reviews`)
       .then((res) => setReviews(res.data))
       .catch((err) => console.error('Error fetching reviews:', err));
   }, []);
