@@ -280,6 +280,81 @@ p {
   background-color: #ff4500;
 }
 
+
+.chat-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+  background-color: rgba(100, 116, 139, 0.4); /* soft gray */
+  border-radius: 10px;
+}
+
+.chat-input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 600px) {
+  .chat-input-row {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.chat-input {
+  flex-grow: 1;
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 16px;
+  background-color: #f1f5f9;
+}
+
+.send-button {
+  padding: 10px 16px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-family: 'Poppins', sans-serif;
+}
+
+.senderbutton:hover {
+  background-color: #ff4500;
+}
+
+.send-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.clear-button-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.clear-button {
+  padding: 10px 20px;
+  background-color: #6b7280;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.clear-button:hover {
+  background-color: #ff4500;
+}
+
+
 /* Responsive */
 @media (max-width: 768px) {
   .contact h2 {
@@ -290,4 +365,83 @@ p {
     padding: 30px 20px;
   }
 }
+.aigeneration {
+  padding: 2rem;
+  background-color: #f9f9f9;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.text {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.chat-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+}
+
+/* Chat history on the left */
+.chat-container {
+  flex: 2;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 1rem;
+  height: 400px;
+  overflow-y: auto;
+  text-align: left;
+}
+
+/* Controls on the right */
+.controls {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  font-family: 'Poppins', sans-serif;
+}
+
+.input-row {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  height: 48px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 50vh;
+}
+
+.input-row input {
+  flex-grow: 1;
+  font-family: 'Poppins', sans-serif;
+  
+}
+
+.input-row button {
+  padding: 0.5rem 1rem;
+}
+
+.clear-button {
+  padding: 0.5rem 1rem;
+  background-color: black;
+  border: none;
+  cursor: pointer;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  font-weight: bold;
+}
+.senderbutton {
+  font-family: 'Poppins', sans-serif;
+  background-color: black;
+
+}
+
 

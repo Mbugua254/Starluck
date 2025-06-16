@@ -1,16 +1,62 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import './Home.css';
 import RecentReview from './RecentReview';
 import Paris from '../assets/Paris.jpg';
 import Safaris from '../assets/Safaris.jpg';
 import Bali from '../assets/Bali.jpg';
+import ChatHistory from "./ChatHistory";
+import Loading from "./Loading";
+
 
 
 const Home = () => {
   const [recentReview, setRecentReview] = useState(null);
+  const [userInput, setUserInput] = useState("");
+  const [chatHistory, setChatHistory] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
+  // inislize your Gemeni Api
+  const genAI = new GoogleGenerativeAI(
+    "AIzaSyBjq_pq257QBU5dDFhUKMT7lnZvngt_QSo"
+  );
+  const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+  // Function to handle user input
+  const handleUserInput = (e) => {
+    setUserInput(e.target.value);
+  };
+
+  // Function to send user message to Gemini
+  const sendMessage = async () => {
+    if (userInput.trim() === "") return;
+
+    setIsLoading(true);
+    try {
+      // call Gemini Api to get a response
+      const result = await model.generateContent(userInput);
+      const response = await result.response;
+      console.log(response);
+      // add Gemeni's response to the chat history
+      setChatHistory([
+        ...chatHistory,
+        { type: "user", message: userInput },
+        { type: "bot", message: response.text() },
+      ]);
+    } catch {
+      console.error("Error sending message");
+    } finally {
+      setUserInput("");
+      setIsLoading(false);
+    }
+  };
+
+  // Function to clear the chat history
+  const clearChat = () => {
+    setChatHistory([]);
+  };
   useEffect(() => {
     // Fetch the most recent 5-star review
     axios
@@ -104,6 +150,41 @@ const Home = () => {
     <textarea rows="5" placeholder="Your Message"></textarea>
     <button type="submit">Send Message</button>
   </div>
+</section>
+<section className='aigeneration'>
+<div className="container">
+      <h1 className="text">Got Questions? Ask Our Travel Bot</h1>
+
+      <div className='chat-layout'>
+      <div className="chat-container">
+        <ChatHistory chatHistory={chatHistory} />
+        <Loading isLoading={isLoading} />
+      </div>
+
+      <div className='controls'>
+      <div className="input-row">
+        <input
+          type="text"
+          placeholder="Type your message..."
+          value={userInput}
+          onChange={handleUserInput}
+        />
+        <button className='senderbutton'
+          onClick={sendMessage}
+          disabled={isLoading}
+        >
+          Send
+        </button>
+      </div>
+      <button
+        className="clear-button"
+        onClick={clearChat}
+      >
+        Clear Chat
+      </button>
+    </div>
+    </div>
+    </div>
 </section>
 
 
